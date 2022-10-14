@@ -33,11 +33,11 @@ int main()
 {
     double step = init();
     
-    double x = from;
+    double x = from - step;
     while (x <= to)
     {
-        make_table_line(x, f(x));
         x += step;
+        make_table_line(x, f(x));
     }
 }
 
