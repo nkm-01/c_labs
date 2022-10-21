@@ -5,11 +5,13 @@ int main()
     double step = init();
     
     double x = from;
-    while (x <= to)
+    while (fabs(to - x) >= step)
     {
         make_table_line(x, f(x));
         x += step;
     }
+
+    return 0;
 }
 
 /*

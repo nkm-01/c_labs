@@ -5,7 +5,7 @@ int main()
 {
     double step = init();
 
-    for (double x = from; x <= to; x += step)
+    for (double x = from; (x - to) < step; x += step)
         make_table_line(x, f(x));
     
     return 0;
