@@ -4,55 +4,15 @@ int main()
 {
     double step = init();
     
-    double x = from;
-    while (fabs(to - x) >= step)
+    int max_steps = (to - from) / step;
+    int n = 0;
+
+    while(n <= max_steps)
     {
+        double x = from + step * n;
         make_table_line(x, f(x));
-        x += step;
+        n++;
     }
 
     return 0;
 }
-
-/*
-
-      ( Начало )
-           |
-        ___L__
-       / step |
-       -------
-          |
-       +------+
-       |x=from|
-       +------+
-          |
-          |<-------+
-          |        |
-          ^        |
-         / \       |
-        /   \      |
-       /     \     |
-  Да  / x<=to \ Нет|
-  +---\       /----+------+
-  |    \     /     |      |
-  |     \   /      |  ( Конец )
-  |      \ /       |
-  |       V        |
-  |                |
-  |                |
-  +-------+        |
-          |        |
-      ++------++   |
-      || f(x) ||   |
-      ++------++   |
-          |        |
-        __L____    |
-       / f(x) /    |
-       -------     |
-          |        |
-      +-------+    |
-      |x+=step|    |
-      +-------+    |
-          |        | 
-          +---------
-*/

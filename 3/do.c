@@ -1,39 +1,17 @@
 #include <stdio.h>
+
 #include "shared.h"
 
 int main()
 {
-    double step = init();
+	double step = init();
+	int max_steps = (to - from) / step;
 
-    for (double x = from; (x - to) < step; x += step)
-        make_table_line(x, f(x));
-    
-    return 0;
+	for (int i = 0; i <= max_steps; i++)
+	{
+		double x = from + step * i;
+		make_table_line(x, f(x));
+	}
+
+	return 0;
 }
-
-/*
-
-      ( Начало )
-           |
-        ___L__
-       / step |
-       -------
-          |
-     /----------\
-    /    x =     \
-  +> from,to,step >------------+
-  | \            /             |
-  |  \----------/              |
-  |       +                ( Конец )
-  |       |     
-  |   ++------++
-  |   || f(x) ||
-  |   ++------++
-  |       |     
-  |     __L____ 
-  |    / f(x) / 
-  |    -------  
-  |       |     
-  |       |      
-  --------+
-*/
