@@ -10,13 +10,13 @@ do.o: clear_do
 while: while.o shared.o
 	gcc while.o shared.o -lm -o while
 
-do: clear_do
+do: clear_do do.o
 	gcc shared.o do.o -o do -lm
 
 clear_while:
-	rm while 2> /dev/null
-	rm while.o 2> /dev/null
+	rm while 2> /dev/null && true
+	rm while.o 2> /dev/null && true
 
 clear_do:
-	rm do 2> /dev/null
-	rm do.o 2> /dev/null
+	rm do 2> /dev/null && true
+	rm do.o 2> /dev/null && true
