@@ -2,6 +2,7 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <stdio_ext.h>
 #include <ctype.h>
 
 #define TRUE 1
@@ -73,6 +74,7 @@ int main()
                 begin_enter_number = FALSE;
             }
         }
+
         else // !isprint(c) || is_ctrl
         {
             if (c == 0x1b) // escape
@@ -91,6 +93,8 @@ int main()
                 is_ctrl = FALSE;
                 is_first_ctrl_entered = FALSE;
                 second_ctrl = c;
+
+                __fpurge(stdin);
 
                 if (first_ctrl == '[' && second_ctrl == 'F')
                     break; //while loop
