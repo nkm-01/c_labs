@@ -1,5 +1,8 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <stdio_ext.h>
+#include <termios.h>
+#include <unistd.h>
 
 struct student
 {
@@ -38,14 +41,14 @@ void register_student(struct student* item)
 
 int add_student(struct student** db, int db_size)
 {
-    *db = realloc(*db, db_size + sizeof(struct student));
+    *db = realloc(*db, (db_size + 1) * sizeof(struct student));
     if (NULL == db)
     {
         printf("Не удалось выделить память!\n");
         exit(EXIT_FAILURE);
     }
 
-    struct student* new_item = &(*db[db_size++]);
+    struct student* new_item = &(*db)[db_size++];
     register_student(new_item);
     printf("Студент добавлен.\n");
     return db_size;
@@ -54,7 +57,7 @@ int add_student(struct student** db, int db_size)
 int print_student(struct student item)
 {
     //       фам   имя   группа     оценки      средн.
-    printf("%-30s|%-20s|%03i-%02i| %1i %1i %1i |%1.2d",
+    printf("%-30s|%-20s|%03i-%02i| %1i %1i %1i |%1.2f",
     item.name, item.surname,
     item.group / 100, item.group % 100,
     item.marks[0], item.marks[1], item.marks[2],
@@ -81,9 +84,24 @@ void print_excellent(struct student db[], int db_size)
         {
             printf("%4i ", i);
             print_student(db[i]);
+            printf("\n");
         }
     }
 }
+
+int mygetch()
+{
+    struct termios oldt, newt;
+    int c;
+    tcgetattr(STDIN_FILENO, &oldt);
+    newt = oldt;
+    newt.c_lflag &= ~(ICANON);
+    tcsetattr(STDIN_FILENO, TCSANOW, &newt);
+    c = getchar();
+    tcsetattr(STDIN_FILENO, TCSANOW, &oldt);
+    return c;
+}
+
 
 int main()
 {
@@ -94,7 +112,8 @@ int main()
     {
         printf("[1] - добавить, [2] - вывести всё, [3] - вывести всех со средним баллом >= 4.5, [q] - выход >");
         char answer;
-        scanf("%c", &answer);
+        answer = mygetch();
+        printf("\n");
 
         switch (answer)
         {
@@ -109,8 +128,14 @@ int main()
                 break;
             case 'q':
                 return 0;
+                break;
+            case '\n':
+                break;
             default:
                 printf("Неизвестная команда\n");
+                break;
         }
+
+        __fpurge(stdin);
     }
 }
