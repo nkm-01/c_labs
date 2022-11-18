@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdio_ext.h>
 #include <stdlib.h>
 
 #include "student.h"
@@ -28,4 +29,5 @@ void register_student(struct student* item)
     item->surname = surname;
     item->group = group_field * 100 + group_class;
     item->marks = marks;
+    __fpurge(stdin);
 }
