@@ -6,7 +6,7 @@ struct student
     char* name;
     char* surname;
     int group;
-    int* marks;
+    int marks[3];
 };
 
 float average(int a[3]);

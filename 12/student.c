@@ -13,21 +13,24 @@ void register_student(struct student* item)
 {
     char* name = malloc(200);
     char* surname = malloc(200);
-    int group_field, group_class;
-    int* marks = malloc(3 * sizeof(int));
+    int group_field = 0, group_class = 0;
+    int marks[3];
 
-    printf("Фамилия: ");
+    printf("Surname: ");
     scanf("%s", name);
-    printf("Имя: ");
+    printf("Name: ");
     scanf("%s", surname);
-    printf("Группа: ");
+    printf("Group (xxx-xx): ");
     scanf("%d-%d", &group_field, &group_class);
-    printf("3 оценки за экзамены: ");
+    printf("3 exam marks: ");
     scanf("%d %d %d", &marks[0], &marks[1], &marks[2]);
 
     item->name = name;
     item->surname = surname;
     item->group = group_field * 100 + group_class;
-    item->marks = marks;
+
+    for (int i = 0; i < 3; i++)
+        item->marks[i] = marks[i];
+
     __fpurge(stdin);
 }

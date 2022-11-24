@@ -9,14 +9,22 @@ int add_student(struct student** db, int db_size)
     *db = realloc(*db, (db_size + 1) * sizeof(struct student));
     if (NULL == db)
     {
-        printf("Не удалось выделить память!\n");
-        exit(EXIT_FAILURE);
+        printf("Can't allocate memory!\nStudent is NOT added!");
+        return db_size;
     }
 
     struct student* new_item = &(*db)[db_size++];
     register_student(new_item);
-    printf("Студент добавлен.\n");
+    printf("Student is added.\n");
     return db_size;
+}
+
+void free_student(struct student* student)
+{
+    free(student->name);
+    free(student->surname);
+    student->name = NULL;
+    student->surname = NULL;
 }
 
 int remove_student(struct student** db, int db_size, int index)
@@ -24,12 +32,18 @@ int remove_student(struct student** db, int db_size, int index)
     if (db_size <= 0)
         return 0;
 
+    free_student(&(*db)[index]);
+
     db_size--;
     struct student* new_loc = malloc( db_size * sizeof(struct student) );
-    size_t glue_offset = (index - 1)*sizeof(struct student);
-    
-    memcpy(new_loc, *db, index + glue_offset);
-    memcpy(new_loc + glue_offset, *db, db_size * sizeof(struct student) - glue_offset);
+    size_t glue_offset = index * sizeof(struct student);
+
+    memcpy(new_loc, *db, index * glue_offset);
+    if (index + 1 < db_size)
+        memcpy(new_loc + index, *db + index + 1, db_size * sizeof(struct student) - glue_offset);
+
+    *db = new_loc;
+    return db_size;
 }
 
 void edit_student(struct student* db, int index)
@@ -69,6 +83,7 @@ int read_from_file(struct student** db, int db_size, const char* filename)
         s->surname = surname;
     }
 
+    printf("DB loaded from file.\n");
     return db_size;
 }
 
@@ -87,15 +102,13 @@ void write_to_file(struct student* db, int db_size, const char* filename)
         fprintf(file, "%s %s\n%d\n%d %d %d\n", db[i].name, db[i].surname,
         db[i].group, db[i].marks[0], db[i].marks[1], db[i].marks[2]);
     }
+    fclose(file);
 }
 
 void free_db(struct student** db, int db_size)
 {
     for (int i = 0; i < db_size; i++)
-    {
-        free((*db[i]).name);
-        free((*db[i]).surname);
-    }
+        free_student(db[i]);
 
     free(*db);
     *db = NULL;

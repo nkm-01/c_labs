@@ -38,7 +38,28 @@ void safe_prompt(char* buff, int size)
 }
 
 void print_help()
-{}
+{
+    printf("list of commands:\n");
+    printf("add -- add a new student to DB\n");
+    printf("print all -- print all students in DB\n");
+    printf("print excellent -- print all students with average mark >= 4.5\n");
+    printf("delete <id> -- delete a student with ID <id>\n");
+    printf("modify <id> -- edit data about student with ID <id>\n");
+    printf("save -- save DB to file students.db\n");
+    printf("load -- load DB from file students.db\n");
+    printf("quit -- save DB to file and exit\n");
+    printf("help -- print this text\n");
+}
+
+int test_id(int id, int db_size)
+{
+    if (id <= 0 || id > db_size)
+    {
+        printf("Введён неверный ID\n");
+        return 0;
+    }
+    return 1;
+}
 
 int main()
 {
@@ -47,6 +68,8 @@ int main()
     char command[255];
 
     char db_file[] = "students.db";
+
+    db_size = read_from_file(&database, db_size, db_file);
 
     while (1)
     {
@@ -67,18 +90,18 @@ int main()
         else if (strncmp(command, "delete", 6) == 0)
         {
             int id = atoi(command + 7);
-            if (id == 0 || command[6] == '\0' || !isspace(command[6]))
-                printf("usage: delete <id>");
+            if (!test_id(id, db_size) || command[6] == '\0' || !isspace(command[6]))
+                printf("usage: delete <id>\n");
             else
-                remove_student(&database, db_size, id);
+                db_size = remove_student(&database, db_size, id - 1);
         }
-        else if (strcmp(command, "modify") == 0)
+        else if (strncmp(command, "modify", 6) == 0)
         {
             int id = atoi(command + 7);
-            if (id == 0 || command[6] == '\0' || !isspace(command[6]))
-                printf("usage: modify <id>");
+            if (!test_id(id, db_size) || command[6] == '\0' || !isspace(command[6]))
+                printf("usage: modify <id>\n");
             else
-                edit_student(database, id);
+                edit_student(database, id - 1);
         }
         else if (strcmp(command, "save") == 0)
         {
@@ -86,7 +109,7 @@ int main()
         }
         else if (strcmp(command, "load") == 0)
         {
-            read_from_file(&database, db_size, db_file);
+            db_size = read_from_file(&database, db_size, db_file);
         }
         else if (strcmp(command, "quit") == 0)
         {

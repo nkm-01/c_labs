@@ -18,7 +18,7 @@ void print_all(struct student db[], int db_size)
     printf(" ID | Фамилия                      | Имя                |Группа| Оценки|Ср. балл\n");
     for (int i = 0; i < db_size; i++)
     {
-        printf("%4i|", i);
+        printf("%4i|", i + 1);
         print_student(db[i]);
         printf("\n");
     }
@@ -31,7 +31,7 @@ void print_excellent(struct student db[], int db_size)
     {
         if (average(db[i].marks) - 4.50 >= -0.005)
         {
-            printf("%4i ", i);
+            printf("%4i|", i);
             print_student(db[i]);
             printf("\n");
         }
