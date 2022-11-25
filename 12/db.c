@@ -19,14 +19,6 @@ int add_student(struct student** db, int db_size)
     return db_size;
 }
 
-void free_student(struct student* student)
-{
-    free(student->name);
-    free(student->surname);
-    student->name = NULL;
-    student->surname = NULL;
-}
-
 int remove_student(struct student** db, int db_size, int index)
 {
     if (db_size <= 0)
@@ -38,8 +30,8 @@ int remove_student(struct student** db, int db_size, int index)
     struct student* new_loc = malloc( db_size * sizeof(struct student) );
     size_t glue_offset = index * sizeof(struct student);
 
-    memcpy(new_loc, *db, index * glue_offset);
-    if (index + 1 < db_size)
+    memcpy(new_loc, *db, glue_offset);
+    if (index + 1 <= db_size)
         memcpy(new_loc + index, *db + index + 1, db_size * sizeof(struct student) - glue_offset);
 
     *db = new_loc;

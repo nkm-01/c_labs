@@ -11,5 +11,6 @@ struct student
 
 float average(int a[3]);
 void register_student(struct student* item);
+void free_student(struct student* student);
 
 #endif

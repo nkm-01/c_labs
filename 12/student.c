@@ -34,3 +34,11 @@ void register_student(struct student* item)
 
     __fpurge(stdin);
 }
+
+void free_student(struct student* student)
+{
+    free(student->name);
+    free(student->surname);
+    student->name = NULL;
+    student->surname = NULL;
+}
