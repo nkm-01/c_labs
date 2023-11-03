@@ -68,7 +68,7 @@ int main()
 {
     int n, m;
     printf("Размер матрицы (WxH): ");
-    scanf("%dx%d", &n, &m);
+    scanf("%dx%d", &m, &n);
 
     srand(time(NULL));
 
